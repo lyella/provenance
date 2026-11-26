@@ -145,7 +145,15 @@ async function PassportBody({ params }: Pick<PageProps<"/p/[handle]">, "params">
                     <span>{c.ref}</span>
                     <span aria-hidden>·</span>
                     <span>{c.kind}</span>
-                    {c.slipped ? <Stamp kind="slipped">slipped</Stamp> : <Stamp kind="verified">held</Stamp>}
+                    {c.slipped ? (
+                      <Stamp kind="slipped">slipped</Stamp>
+                    ) : c.intentCount === 0 ? (
+                      // Nothing decided yet is not a held case: a record cannot
+                      // have kept a promise it has not made.
+                      <Stamp kind="neutral">no decisions yet</Stamp>
+                    ) : (
+                      <Stamp kind="verified">held</Stamp>
+                    )}
                     {!c.open && <Stamp kind="sealed">sealed</Stamp>}
                   </div>
                   <h3 className="display-lg mt-2.5 max-w-[28ch]">{c.title}</h3>
