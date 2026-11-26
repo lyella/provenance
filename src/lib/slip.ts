@@ -13,8 +13,8 @@ export interface PolicyShape {
  * Exposure policy, in plain words:
  *
  *  - `zero` — any drift above zero is a slip. Merciless; good for high-stakes work.
- *  - `half` — a generous allowance: two decision-headroom above the case's peak
- *    exposure, never below its single largest decision.
+ *  - `half` (headroom) — a fixed allowance of four points, independent of how
+ *    long the case has been running.
  *  - `none` — declared on the case, no slip can be issued.
  *
  * Every policy is judged inside a rolling window, so a case allowed to carry
@@ -22,7 +22,7 @@ export interface PolicyShape {
  */
 export const POLICY_LABEL: Record<SlipPolicy, string> = {
   zero: "no open drift",
-  half: "two decision-headroom above peak exposure",
+  half: "a fixed four-point allowance",
   none: "exposure is not policed",
 };
 
@@ -46,26 +46,39 @@ export function largestEvent(events: LedgerEvent[]): number {
 }
 
 /**
- * Cap in exposure points.
+ * Cap in exposure points for the "headroom" policy.
  *
- * `half` — "headroom" — is max(3, the widest drift the case has reached − 1).
+ * Fresh exposure is a running counter of decisions made. Corrections cannot pay
+ * it down (a superseding decision is itself a commitment), so this cap is simply
+ * a fixed allowance above zero. Two consequences, both deliberate:
  *
- * Read it as a rule about *patterns*, not moments:
+ *  - a long record of firm decisions is *not* punished for its length: at one
+ *    point each it takes many decisions to approach a reasonable allowance;
+ *  - ambiguity is resolved by the `zero` policy, which flags any open drift at all.
  *
- *  - any single decision up to a medium-confidence call fits inside the 3-point
- *    floor, so one careful step never slips;
- *  - one low-confidence gamble (4) is absorbed — people must be able to take real
- *    risks honestly;
- *  - two gambles, or a gamble on top of an overconfident streak, crosses the cap
- *    and the slip is issued at the decision that crossed it.
- *
- * The cap is priced from the widest excursion already made, never from the
- * current drift: a cap that moved with the drift would keep pace with it and could
- * never be crossed, which is the one thing this ledger must not do.
+ * Only the `zero` policy can express "any drift is a slip"; `half` always needs a
+ * positive allowance, or a single careful decision would begin a slip.
  */
 export function exposureCap(events: LedgerEvent[]): number {
-  return Math.max(3, peakExposure(events) - 1);
+  void events;
+  return HEADROOM_ALLOWANCE;
 }
+
+/**
+ * The fixed allowance of the "headroom" policy, in exposure points.
+ *
+ * Tuned so the label means something. At 4 points almost every real case slips
+ * (a single low-confidence decision plus ordinary follow-up work already reaches
+ * it), and a policy that everyone fails carries no signal. At 7:
+ *
+ *  - a case of careful decisions holds comfortably;
+ *  - one low-confidence gamble, or a gamble with a little follow-up, still holds;
+ *  - a case that keeps guessing, or that admits several mistakes, slips.
+ *
+ * Roughly: seven high-confidence decisions, or three medium ones, or a gamble
+ * plus three careful decisions.
+ */
+export const HEADROOM_ALLOWANCE = 7;
 
 /** The fixed floor of the "headroom" policy, in exposure points. */
 export const HEADROOM_FLOOR = 3;

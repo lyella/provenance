@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const POLICIES = [
-  { value: "half", label: "Headroom", hint: "Two decision-headroom above your peak exposure. One gamble is absorbed; a run of them is not. The honest default." },
+  { value: "half", label: "Headroom", hint: "A fixed four-point allowance. About four careful decisions fit; one low-confidence gamble just fits; two do not. The honest default." },
   { value: "zero", label: "Zero", hint: "Any open drift is a slip. For decisions where being wrong is expensive." },
   { value: "none", label: "Unpoliced", hint: "The ledger still records drift, but no slip can issue." },
 ];

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildLedger, CONFIDENCE_PX, type LedgerEvent } from "@/lib/ledger";
-import { slipCore, exposureCap, peakExposure, slipNumber, round2 } from "@/lib/slip";
+import { slipCore, exposureCap, HEADROOM_ALLOWANCE, slipNumber, round2 } from "@/lib/slip";
 import type { Intent } from "@/lib/types";
 
 const at = (minute: number) => new Date(Date.UTC(2026, 10, 26, 0, minute)).toISOString();
@@ -90,16 +90,13 @@ describe("exposure pricing", () => {
 });
 
 describe("policy caps", () => {
-  const events: LedgerEvent[] = [
-    { kind: "intent", n: 1, at: at(1), ref: "c", delta: 4 },
-    { kind: "intent", n: 2, at: at(2), ref: "c", delta: 2 },
-  ];
-
-  it("prices the cap from the widest excursion, with a 3-point floor", () => {
-    expect(peakExposure(events)).toBe(6);
-    expect(exposureCap(events)).toBe(5);
-    expect(exposureCap([{ kind: "intent", n: 1, at: at(1), ref: "c", delta: 1 }])).toBe(3);
-    expect(exposureCap([])).toBe(3);
+  it("is a fixed allowance, independent of how much history a case has", () => {
+    // The cap must not drift with the case, or a long record of firm decisions
+    // would be punished for its length.
+    const one = [{ kind: "intent" as const, n: 1, at: at(1), ref: "c", delta: 1 }];
+    const many = Array.from({ length: 40 }, (_, i) => ({ kind: "intent" as const, n: i + 1, at: at(i), ref: "c", delta: 1 }));
+    expect(exposureCap(one)).toBe(HEADROOM_ALLOWANCE);
+    expect(exposureCap(many)).toBe(HEADROOM_ALLOWANCE);
   });
 });
 
@@ -122,22 +119,27 @@ describe("slip detection", () => {
     expect(slipCore(series([1]), "half", 14, now).slipped).toBe(false);
   });
 
-  it("lets one intentional gamble pass, but not a second", () => {
-    // a low-confidence gamble (4) has a 3-point floor cap, so it crosses at once…
-    expect(slipCore(series([4]), "half", 14, now).slipped).toBe(true);
-    // …but a medium gamble (2) is absorbed, while two of them are not
-    expect(slipCore(series([2]), "half", 14, now).slipped).toBe(false);
-    expect(slipCore(series([2, 2]), "half", 14, now).slipped).toBe(true);
+  it("absorbs one low-confidence gamble, but not two", () => {
+    // a 4-point gamble sits inside the 7-point allowance, even with follow-up
+    expect(slipCore(series([4]), "half", 14, now).slipped).toBe(false);
+    expect(slipCore(series([4, 1, 1, 1]), "half", 14, now).slipped).toBe(false);
+    // two gambles reach 8
+    expect(slipCore(series([4, 4]), "half", 14, now).slipped).toBe(true);
   });
 
-  it("lets a case coast on firm calls until a guess lands on top", () => {
-    expect(slipCore(series([1, 1, 1]), "half", 14, now).slipped).toBe(false);
-    expect(slipCore(series([1, 1, 2]), "half", 14, now).slipped).toBe(true);
+  it("lets a case coast on firm calls until a run of guesses lands on top", () => {
+    // seven careful decisions sit exactly on the allowance and hold
+    expect(slipCore(series(Array(7).fill(1)), "half", 14, now).slipped).toBe(false);
+    // a low guess after three firm calls: 1+1+1+4 = 7, still holds
+    expect(slipCore(series([1, 1, 1, 4]), "half", 14, now).slipped).toBe(false);
+    // a second gamble takes it to 11
+    expect(slipCore(series([1, 1, 1, 4, 4]), "half", 14, now).slipped).toBe(true);
   });
 
   it("never slips a case made only of high-confidence decisions", () => {
-    // three firm calls reach exactly the 3-point floor and hold
-    expect(slipCore(series([1, 1, 1]), "half", 14, now).slipped).toBe(false);
+    for (let n = 1; n <= HEADROOM_ALLOWANCE; n++) {
+      expect(slipCore(series(Array(n).fill(1)), "half", 14, now).slipped, `${n} firm calls`).toBe(false);
+    }
   });
 
   it("slips when drift exceeds the cap and reports the crossing", () => {

@@ -155,7 +155,7 @@ export default function Home() {
               n: "03",
               k: "The slip",
               t: "Exposure has a ceiling.",
-              b: "Unpoliced, zero, or headroom above peak. Cross it and a slip is issued — the exact decision, the date, the cap. Your weakest link, in writing.",
+              b: "Unpoliced, zero, or a fixed allowance. Cross it and a slip is issued — the exact decision, the date, the cap. Your weakest link, in writing.",
             },
           ].map((c, i) => (
             <Reveal key={c.n} delay={i * 110} className="bg-paper p-6 sm:p-8">
