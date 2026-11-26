@@ -49,8 +49,17 @@
   --color-alarm: var(--alarm);
   --color-alarm-soft: var(--alarm-soft);
 
-  --font-sans: var(--font-sans), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /*
+    Three families, as the reference uses them:
+      --font-display  Fira Sans 900 — every headline
+      --font-body     Inter       — all running text
+      --font-mono     JetBrains   — technical text, hashes, labels, code
+  */
+  --font-display: var(--font-display), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-body: var(--font-body), system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  /* Tailwind's `font-sans` is body copy: anything unstyled should read as prose. */
+  --font-sans: var(--font-body), system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 @layer base {
@@ -66,7 +75,7 @@
   body {
     background-color: var(--paper);
     color: var(--ink);
-    font-family: var(--font-sans), "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: var(--font-body), system-ui, -apple-system, "Segoe UI", sans-serif;
     font-size: 1.125rem;
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
@@ -85,7 +94,7 @@
   h2,
   h3,
   h4 {
-    font-family: var(--font-sans), "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: var(--font-display), "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 900;
     letter-spacing: -0.03em;
     line-height: 0.95;
@@ -98,39 +107,48 @@
 
 @layer components {
   /* ---------------- type scale (heavy grotesque) ---------------- */
+  /* Every heading class carries the display face itself, because these are
+     applied to <p>, <dd> and <span> as well as real headings. */
 
   /* The hero: gigantic, left-aligned, tight. Fluid to the viewport. */
   .h-hero {
+    font-family: var(--font-display), "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 900;
     letter-spacing: -0.045em;
     line-height: 0.9;
     font-size: clamp(2.75rem, 9.4vw, 8.25rem);
   }
   .h-xl {
+    font-family: var(--font-display), "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 900;
     letter-spacing: -0.035em;
     line-height: 0.94;
     font-size: clamp(2rem, 5.6vw, 4.25rem);
   }
   .h-lg {
+    font-family: var(--font-display), "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 900;
     letter-spacing: -0.025em;
     line-height: 1;
     font-size: clamp(1.625rem, 3.4vw, 2.75rem);
   }
   .h-md {
+    font-family: var(--font-display), "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 700;
     letter-spacing: -0.015em;
     line-height: 1.15;
     font-size: clamp(1.125rem, 1.7vw, 1.5rem);
   }
+  /* Running text: Inter, as the reference sets its prose. */
   .lede {
+    font-family: var(--font-body), system-ui, -apple-system, "Segoe UI", sans-serif;
     font-size: clamp(1.125rem, 1.5vw, 1.5rem);
     line-height: 1.45;
     color: var(--ink-soft);
     font-style: italic;
   }
   .body-copy {
+    font-family: var(--font-body), system-ui, -apple-system, "Segoe UI", sans-serif;
     font-size: 1.0625rem;
     line-height: 1.6;
     color: var(--ink-soft);
@@ -155,7 +173,10 @@
     text-transform: uppercase;
     color: var(--ink-soft);
   }
+  /* Figures take the display face: the reference sets its numbers as type, not
+     as data, and they carry the same weight as its headlines. */
   .numeral {
+    font-family: var(--font-display), "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 900;
     letter-spacing: -0.04em;
     line-height: 0.9;

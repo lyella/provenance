@@ -1,18 +1,27 @@
 import type { Metadata } from "next";
-import { Fira_Sans, JetBrains_Mono } from "next/font/google";
+import { Fira_Sans, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Colophon, Header } from "@/components/header";
 
 /**
- * Two voices, both borrowed from the reference's language:
- *  - Fira Sans at 900 for every headline. Heavy, tight, left-aligned.
- *  - JetBrains Mono for anything technical — hashes, labels, figures, code.
- * Body copy stays Fira Sans so the page has one type family and no decoration.
+ * Three families, used exactly as the reference site uses them:
+ *
+ *  - Fira Sans 900 — every headline. Heavy, tight, left-aligned.
+ *  - Inter        — all running text, at 18px. Neutral and quiet, so the
+ *                   headline weights carry the page.
+ *  - JetBrains Mono — technical text: hashes, labels, figures, code, and the
+ *                   small caps-style eyebrow labels.
  */
 const firaSans = Fira_Sans({
-  variable: "--font-sans",
+  variable: "--font-display",
   subsets: ["latin"],
-  weight: ["400", "600", "700", "900"],
+  weight: ["700", "900"],
+  display: "swap",
+});
+
+const inter = Inter({
+  variable: "--font-body",
+  subsets: ["latin"],
   style: ["normal", "italic"],
   display: "swap",
 });
@@ -41,7 +50,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${firaSans.variable} ${jetbrains.variable} antialiased`} data-scroll-behavior="smooth">
+    <html
+      lang="en"
+      className={`${firaSans.variable} ${inter.variable} ${jetbrains.variable} antialiased`}
+      data-scroll-behavior="smooth"
+    >
       <body className="flex min-h-dvh flex-col">
         <Header />
         <div className="flex-1">{children}</div>
