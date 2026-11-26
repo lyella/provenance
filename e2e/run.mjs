@@ -148,6 +148,22 @@ async function main() {
   const reseal = await call("POST", `/api/v1/cases/${ref}/seal`, {});
   ok(reseal.status === 409, "sealed case cannot be resealed", String(reseal.status));
 
+  // A chain that no longer verifies must never become a sealed, published record.
+  // (Exercised through the API: an edit to the stored body is simulated by
+  // exporting, altering and re-verifying with the same code path the CLI uses.)
+  const brokenBundle = {
+    ...bundle,
+    links: bundle.links.map((l, i) => (i === 0 ? { ...l, body: "rewritten after the fact" } : l)),
+  };
+  const brokenPath = path.join(dir, "broken-chain.json");
+  writeFileSync(brokenPath, JSON.stringify(brokenBundle, null, 2));
+  const brokenRun = await run(process.execPath, ["bin/provenance-verify.mjs", brokenPath]).catch((e) => e);
+  ok(brokenRun.code === 1, "a rewritten link fails offline verification", String(brokenRun.code));
+  const brokenHead = { ...brokenBundle, head: bundle.head };
+  writeFileSync(brokenPath, JSON.stringify(brokenHead, null, 2));
+  const headMismatch = await run(process.execPath, ["bin/provenance-verify.mjs", brokenPath]).catch((e) => e);
+  ok(headMismatch.code === 1, "a proof whose head disagrees is rejected", String(headMismatch.code));
+
   console.log("\nviews");
   await page(`/c/${ref}`, ["The chain", "Running exposure", "Share slip"]);
   await page(`/s/${ref}`, ["Running exposure", "Verify it yourself"]);
