@@ -1,0 +1,6 @@
+# Local state and tooling caches that must never be uploaded.
+.data/
+.npm-cache/
+.pnpm-store/
+tsconfig.tsbuildinfo
+scripts/

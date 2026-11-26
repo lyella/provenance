@@ -1,0 +1,59 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files — secrets stay out, but the documented template is committed
+.env
+.env.*
+!.env.example
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Provenance local state.
+# .data/ holds the SQLite database, its write-ahead log and screenshot scratch
+# files. Databases contain password hashes, so they are never committed: the
+# demo is reproducible with `node bin/seed.mjs` instead.
+.data/
+.pnpm-store/
+.npm-cache/
+
+# Local tooling this machine keeps outside the app source (a pinned Node
+# runtime used to run the production build, and helper scripts for it).
+.tools/
+
+# Screenshots and logs produced during review.
+*.png
+*.log

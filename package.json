@@ -1,0 +1,42 @@
+{
+  "name": "provenance",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "next typegen && tsc --noEmit",
+    "verify": "node bin/provenance-verify.mjs",
+    "e2e": "node e2e/run.mjs",
+    "preview": "node scripts/preview.mjs"
+  },
+  "dependencies": {
+    "next": "16.4.6",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/turbopack": "4.3.3",
+    "@types/node": "^26.6.10",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.6",
+    "tailwindcss": "4.3.3",
+    "tsx": "^4.23.15",
+    "typescript": "^5",
+    "vitest": "^4.1.12"
+  },
+  "description": "Decision records with a hash-linked history and a confidence-weighted exposure ledger. Anyone can verify them offline.",
+  "bin": {
+    "provenance-verify": "bin/provenance-verify.mjs"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  }
+}
