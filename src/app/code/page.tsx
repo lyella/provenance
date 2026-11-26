@@ -63,7 +63,7 @@ function Block({ index, title, children }: { index: string; title: string; child
     <section className="mt-16 grid gap-6 border-t border-rule pt-5 md:grid-cols-[10rem_minmax(0,1fr)]">
       <div>
         <p className="label label-ink">{index}</p>
-        <h2 className="display-md mt-2">{title}</h2>
+        <h2 className="h-md mt-2">{title}</h2>
       </div>
       <div className="min-w-0">{children}</div>
     </section>
@@ -75,8 +75,8 @@ export default function CodePage() {
     <main className="shell py-12 sm:py-16">
       <div className="border-b border-ink pb-5">
         <p className="label">The contract / pv.intent/1</p>
-        <h1 className="display-xl mt-4 max-w-[20ch]">
-          Bring your own agent. <span className="em-serif">Check our work.</span>
+        <h1 className="h-xl mt-4 max-w-[20ch]">
+          Bring your own agent. <span className="italic">Check our work.</span>
         </h1>
         <p className="mt-5 max-w-[52ch] text-sm leading-relaxed text-ink-soft">
           Provenance is a protocol before it is a product. Anything that can POST JSON can be an agent — the format
@@ -92,7 +92,7 @@ export default function CodePage() {
         <CopyBlock code={TAMPER} language="shell" />
         <p className="mt-3 text-xs text-ink-faint">
           Or do the same thing without a terminal:{" "}
-          <Link className="link-underline text-ink" href="/verify">
+          <Link className="link text-ink" href="/verify">
             the in-browser verifier
           </Link>
           .
@@ -103,7 +103,7 @@ export default function CodePage() {
         <CopyBlock code={API} language="shell" />
         <p className="mt-3 text-xs text-ink-faint">
           Schema:{" "}
-          <Link className="link-underline text-ink" href="/api/openapi">
+          <Link className="link text-ink" href="/api/openapi">
             /api/openapi
           </Link>
           . The typed client in <code className="font-mono">src/sdk/index.ts</code> wraps exactly these routes.

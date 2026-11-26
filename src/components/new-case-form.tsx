@@ -46,7 +46,7 @@ export function NewCaseForm() {
         <label className="block">
           <span className="label">What are you deciding?</span>
           <input
-            className="display-lg mt-2 w-full border-0 border-b border-rule-strong bg-transparent pb-3 placeholder:text-ink-faint focus:border-ink focus:outline-none"
+            className="h-lg mt-2 w-full border-0 border-b border-rule-strong bg-transparent pb-3 placeholder:text-ink-faint focus:border-ink focus:outline-none"
             name="title"
             required
             minLength={3}
@@ -115,7 +115,7 @@ export function NewCaseForm() {
       <aside className="border-t border-ink pt-4 text-sm leading-relaxed text-ink-soft">
         <p className="label label-ink">Choosing a policy</p>
         <p className="mt-3">
-          A <em className="em-serif">slip</em> is not a punishment. It is a disclosure: the record says the case asked
+          A <em className="italic">slip</em> is not a punishment. It is a disclosure: the record says the case asked
           for more trust than its decisions had earned, with the reason.
         </p>
         <p className="mt-3">

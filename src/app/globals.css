@@ -1,53 +1,56 @@
 @import "tailwindcss";
 
 /*
-  PROVENANCE — neo-editorial.
+  PROVENANCE — grotesque type, flat colour, hard rules.
 
-  The page should read like the front matter of a printed annual report:
-  an oversized high-contrast serif for claims, a monospace for evidence,
-  hairline rules instead of boxes, and huge negative space. Colour is almost
-  absent on purpose — the only saturated ink is the vermilion used for a slip,
-  so when the record breaks, the page breaks with it.
+  Modelled on the visual language of smartthings.de: a heavy grotesque
+  (Fira Sans 900) set enormous and left-aligned, pure black on white, one
+  full-bleed signal band, JetBrains Mono for anything technical, and hairline
+  rules doing the work that boxes usually do.
+
+  Three rules:
+   - Headlines are the design. Set them huge, tight, and let them wrap.
+   - Colour is flat, never gradient. There is exactly one accent: the band.
+   - Rules are 1px and always full-bleed or full-width. No cards, no shadows.
 */
 
 :root {
-  --paper: #f4f1ea;
-  --paper-deep: #e9e4d9;
-  --ink: #12110e;
-  --ink-soft: #4b463c;
-  --ink-faint: #948c7c;
-  --rule: #d6cfc0;
-  --rule-strong: #a9a090;
-  --signal: #c8361e;
-  --signal-soft: #f2d9d2;
-  --verified: #2c5340;
-  --verified-soft: #dde5dc;
-  --alarm: #7a1f0e;
-  --alarm-soft: #f0cec4;
-  --night: #12110e;
+  --paper: #ffffff;
+  --paper-deep: #f5f4f2;
+  --paper-grey: #f9f8f6;
+  --ink: oklch(0.12 0.01 65);
+  --ink-soft: oklch(0.42 0.01 65);
+  --ink-faint: oklch(0.62 0.01 65);
+  --rule: oklch(0.12 0.01 65 / 0.16);
+  --rule-strong: oklch(0.12 0.01 65 / 0.32);
+  --signal: oklch(0.58 0.2 32);
+  --signal-ink: oklch(0.5 0.19 32);
+  --signal-soft: oklch(0.95 0.03 32);
+  --verified: oklch(0.45 0.09 155);
+  --verified-soft: oklch(0.95 0.02 155);
+  --alarm: oklch(0.45 0.16 30);
+  --alarm-soft: oklch(0.94 0.04 30);
 }
 
 @theme inline {
   --color-paper: var(--paper);
   --color-paper-deep: var(--paper-deep);
+  --color-paper-grey: var(--paper-grey);
   --color-ink: var(--ink);
   --color-ink-soft: var(--ink-soft);
   --color-ink-faint: var(--ink-faint);
   --color-rule: var(--rule);
   --color-rule-strong: var(--rule-strong);
   --color-signal: var(--signal);
+  --color-signal-ink: var(--signal-ink);
   --color-signal-soft: var(--signal-soft);
   --color-verified: var(--verified);
   --color-verified-soft: var(--verified-soft);
   --color-alarm: var(--alarm);
   --color-alarm-soft: var(--alarm-soft);
-  --color-night: var(--night);
 
-  --font-display: var(--font-display), "Times New Roman", serif;
-  --font-accent: var(--font-accent-serif), "Times New Roman", serif;
-  --font-ui: var(--font-ui), ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-ui), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-mono), ui-monospace, monospace;
+  --font-sans: var(--font-sans), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
 }
 
 @layer base {
@@ -63,21 +66,12 @@
   body {
     background-color: var(--paper);
     color: var(--ink);
-    font-family: var(--font-ui), ui-sans-serif, system-ui, sans-serif;
-    font-size: 1rem;
+    font-family: var(--font-sans), "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1.125rem;
+    line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     overflow-x: clip;
-  }
-  /* Paper grain: a static, sub-perceptual noise so the surface never looks flat. */
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    pointer-events: none;
-    opacity: 0.035;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
   ::selection {
     background: var(--ink);
@@ -91,6 +85,10 @@
   h2,
   h3,
   h4 {
+    font-family: var(--font-sans), "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 0.95;
     text-wrap: balance;
   }
   p {
@@ -99,112 +97,87 @@
 }
 
 @layer components {
-  /* ---------------- type ---------------- */
+  /* ---------------- type scale (heavy grotesque) ---------------- */
 
-  .display {
-    font-family: var(--font-display), serif;
-    font-weight: 400;
-    letter-spacing: -0.035em;
-    line-height: 0.92;
-  }
-  /* The hero claim: fluid between phone and ultrawide. */
-  .display-hero {
-    font-family: var(--font-display), serif;
-    font-weight: 400;
-    letter-spacing: -0.04em;
+  /* The hero: gigantic, left-aligned, tight. Fluid to the viewport. */
+  .h-hero {
+    font-weight: 900;
+    letter-spacing: -0.045em;
     line-height: 0.9;
-    font-size: clamp(2.9rem, 9.2vw, 8.6rem);
-    font-variation-settings: "SOFT" 30, "WONK" 1, "opsz" 144;
+    font-size: clamp(2.75rem, 9.4vw, 8.25rem);
   }
-  /* The emphasised line of a hero: the accent italic, optically smaller. */
-  .display-hero-accent {
-    font-family: var(--font-accent), serif;
-    font-style: italic;
-    font-weight: 400;
-    letter-spacing: -0.02em;
-    line-height: 0.95;
-    font-size: clamp(2.7rem, 8.6vw, 8rem);
+  .h-xl {
+    font-weight: 900;
+    letter-spacing: -0.035em;
+    line-height: 0.94;
+    font-size: clamp(2rem, 5.6vw, 4.25rem);
   }
-  .display-xl {
-    font-family: var(--font-display), serif;
-    font-weight: 400;
-    letter-spacing: -0.03em;
-    line-height: 0.95;
-    font-size: clamp(2.2rem, 5.4vw, 4.4rem);
+  .h-lg {
+    font-weight: 900;
+    letter-spacing: -0.025em;
+    line-height: 1;
+    font-size: clamp(1.625rem, 3.4vw, 2.75rem);
   }
-  .display-lg {
-    font-family: var(--font-display), serif;
-    font-weight: 400;
-    letter-spacing: -0.02em;
-    line-height: 1.02;
-    font-size: clamp(1.6rem, 3vw, 2.4rem);
-  }
-  .display-md {
-    font-family: var(--font-display), serif;
-    font-weight: 400;
+  .h-md {
+    font-weight: 700;
     letter-spacing: -0.015em;
-    line-height: 1.12;
-    font-size: clamp(1.25rem, 1.9vw, 1.6rem);
+    line-height: 1.15;
+    font-size: clamp(1.125rem, 1.7vw, 1.5rem);
   }
-  /* Italic serif for the one emphasised phrase per page. */
-  .em-serif {
-    font-family: var(--font-accent), serif;
+  .lede {
+    font-size: clamp(1.125rem, 1.5vw, 1.5rem);
+    line-height: 1.45;
+    color: var(--ink-soft);
     font-style: italic;
-    letter-spacing: -0.01em;
+  }
+  .body-copy {
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
   }
 
-  /* Underline that draws in from the left on hover. */
-  .link-underline {
-    background-image: linear-gradient(currentColor, currentColor);
-    background-size: 0% 1px;
-    background-repeat: no-repeat;
-    background-position: 0 100%;
-    transition: background-size 380ms cubic-bezier(0.16, 1, 0.3, 1);
-    padding-bottom: 2px;
-  }
-  .link-underline:hover,
-  a:hover > .link-underline {
-    background-size: 100% 1px;
-  }
-
-  /* Tiny monospace label, the "spec sheet" voice. */
+  /* Technical voice: mono, letter-spaced, small caps feel. */
   .label {
     font-family: var(--font-mono), ui-monospace, monospace;
-    font-size: 0.6875rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    color: var(--ink-soft);
     font-weight: 400;
+    text-transform: none;
   }
   .label-ink {
     color: var(--ink);
   }
-  .numeral {
+  .eyebrow {
     font-family: var(--font-mono), ui-monospace, monospace;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -0.03em;
+    font-size: 0.8125rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .numeral {
+    font-weight: 900;
+    letter-spacing: -0.04em;
     line-height: 0.9;
+    font-variant-numeric: lining-nums;
+  }
+  .mono {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-variant-ligatures: none;
   }
   .hash {
     font-family: var(--font-mono), ui-monospace, monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.02em;
-    font-variant-numeric: tabular-nums;
-  }
-  .prose-lede {
-    font-size: clamp(1.05rem, 1.5vw, 1.3rem);
-    line-height: 1.55;
-    color: var(--ink-soft);
-    max-width: 34ch;
+    font-size: 0.8125rem;
+    letter-spacing: 0;
   }
 
   /* ---------------- structure ---------------- */
 
   .shell {
     width: 100%;
-    max-width: 96rem;
+    max-width: 92rem;
     margin-inline: auto;
-    padding-inline: clamp(1.1rem, 4vw, 4.5rem);
+    padding-inline: clamp(1.125rem, 5vw, 4rem);
   }
   .rule-t {
     border-top: 1px solid var(--rule);
@@ -212,8 +185,26 @@
   .rule-b {
     border-bottom: 1px solid var(--rule);
   }
-  .hairline {
+  .rule-hard {
     border-top: 1px solid var(--ink);
+  }
+
+  /* A full-bleed band of flat signal colour, the site's one accent. */
+  .band {
+    background: var(--signal);
+    color: #fff;
+  }
+  .band .label,
+  .band .eyebrow {
+    color: rgb(255 255 255 / 0.78);
+  }
+  .band-rule {
+    border-top: 1px solid rgb(255 255 255 / 0.5);
+  }
+
+  /* A thin black rule directly under the masthead, as on the reference. */
+  .masthead-rule {
+    border-bottom: 1.5px solid var(--ink);
   }
 
   /* ---------------- controls ---------------- */
@@ -222,30 +213,24 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.6rem;
+    gap: 0.5rem;
     font-family: var(--font-mono), ui-monospace, monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    padding: 0.85rem 1.4rem;
-    border: 1px solid var(--ink);
-    border-radius: 999px;
+    font-size: 0.875rem;
+    letter-spacing: 0.01em;
+    padding: 0.85rem 1.5rem;
+    border: 1.5px solid var(--ink);
+    border-radius: 0;
     background: var(--ink);
     color: var(--paper);
     transition:
-      background-color 220ms cubic-bezier(0.2, 0.7, 0.2, 1),
-      color 220ms cubic-bezier(0.2, 0.7, 0.2, 1),
-      transform 220ms cubic-bezier(0.2, 0.7, 0.2, 1);
+      background-color 160ms ease,
+      color 160ms ease;
     cursor: pointer;
     white-space: nowrap;
   }
   .btn:hover {
     background: var(--signal);
     border-color: var(--signal);
-    transform: translateY(-2px);
-  }
-  .btn:active {
-    transform: translateY(0);
   }
   .btn-ghost {
     background: transparent;
@@ -253,97 +238,100 @@
   }
   .btn-ghost:hover {
     background: var(--ink);
-    border-color: var(--ink);
     color: var(--paper);
   }
   .btn-sm {
-    padding: 0.5rem 0.95rem;
-    font-size: 0.66rem;
+    padding: 0.55rem 1rem;
+    font-size: 0.8125rem;
   }
   .btn:disabled {
-    opacity: 0.4;
+    opacity: 0.35;
     cursor: not-allowed;
-    transform: none;
+  }
+
+  /* Underlined text link, the reference's only other affordance. */
+  .link {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+    transition: color 160ms ease, text-decoration-color 160ms ease;
+  }
+  .link:hover {
+    color: var(--signal-ink);
   }
 
   .input {
     width: 100%;
     background: transparent;
-    border: 0;
-    border-bottom: 1px solid var(--rule-strong);
+    border: 1px solid var(--rule-strong);
     border-radius: 0;
-    padding: 0.6rem 0 0.6rem;
+    padding: 0.7rem 0.85rem;
     font-size: 1rem;
+    font-family: inherit;
     color: var(--ink);
-    transition: border-color 180ms ease;
+    transition: border-color 160ms ease;
   }
   .input::placeholder {
     color: var(--ink-faint);
   }
   .input:focus {
     outline: none;
-    border-bottom-color: var(--ink);
+    border-color: var(--ink);
   }
   .field-error {
-    color: var(--signal);
-    font-size: 0.82rem;
+    color: var(--signal-ink);
+    font-size: 0.875rem;
   }
 
   /* ---------------- marks ---------------- */
 
-  /* A rubber stamp: thick ink border, mono caps, very slight rotation. */
   .stamp {
     display: inline-flex;
     align-items: center;
-    gap: 0.45rem;
+    gap: 0.35rem;
     font-family: var(--font-mono), ui-monospace, monospace;
-    font-size: 0.66rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    padding: 0.28rem 0.6rem;
-    border: 1.5px solid currentColor;
-    border-radius: 3px;
-    transform: rotate(-1.4deg);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    padding: 0.2rem 0.5rem;
+    border: 1px solid currentColor;
+    border-radius: 0;
     white-space: nowrap;
   }
   .stamp-slipped {
-    color: var(--signal);
+    color: var(--signal-ink);
     background: var(--signal-soft);
   }
   .stamp-verified {
     color: var(--verified);
+    background: var(--verified-soft);
   }
   .stamp-broken {
-    color: var(--alarm);
-    background: var(--alarm-soft);
-    font-weight: 500;
+    color: #fff;
+    background: var(--alarm);
+    border-color: var(--alarm);
   }
 }
 
-/* ---------------- motion ---------------- */
+/* ---------------- motion: restrained, once ---------------- */
 
 @keyframes stamp-in {
-  0% {
+  from {
     opacity: 0;
-    transform: rotate(-10deg) scale(1.45);
+    transform: scale(1.12);
   }
-  55% {
+  to {
     opacity: 1;
-    transform: rotate(-2deg) scale(0.97);
-  }
-  100% {
-    opacity: 1;
-    transform: rotate(-1.4deg) scale(1);
+    transform: none;
   }
 }
 .stamp-in {
-  animation: stamp-in 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: stamp-in 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes row-in {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
@@ -351,36 +339,33 @@
   }
 }
 .row-in {
-  animation: row-in 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: row-in 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Scroll reveal — the element starts low and lifts, once, into place. */
 .rv {
   opacity: 0;
-  transform: translateY(22px);
+  transform: translateY(14px);
   transition:
-    opacity 900ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 620ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 620ms cubic-bezier(0.16, 1, 0.3, 1);
   transition-delay: var(--rv-delay, 0ms);
-  will-change: opacity, transform;
 }
 .rv.is-in {
   opacity: 1;
   transform: none;
 }
 
-/* Word-level type reveal: each word sits in a mask and rises through it. */
 .split-word {
   display: inline-block;
   overflow: hidden;
   vertical-align: bottom;
-  padding-bottom: 0.06em;
-  margin-bottom: -0.06em;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
 }
 .split-word > span {
   display: inline-block;
-  transform: translateY(110%);
-  transition: transform 1050ms cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(105%);
+  transition: transform 820ms cubic-bezier(0.16, 1, 0.3, 1);
   transition-delay: var(--rv-delay, 0ms);
 }
 .is-in .split-word > span,
@@ -388,25 +373,12 @@
   transform: none;
 }
 
-/* The chain draws itself: a rule that grows to full width once. */
-.draw-rule {
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 1200ms cubic-bezier(0.16, 1, 0.3, 1);
-  transition-delay: var(--rv-delay, 0ms);
-}
-.is-in .draw-rule,
-.draw-rule.is-in {
-  transform: scaleX(1);
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
   .rv,
-  .split-word > span,
-  .draw-rule {
+  .split-word > span {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;

@@ -81,7 +81,7 @@ async function PassportBody({ params }: Pick<PageProps<"/p/[handle]">, "params">
         <div className="flex flex-wrap items-start justify-between gap-6">
           <div>
             <p className="label">Public passport / verified by hash</p>
-            <h1 className="display-hero mt-6 max-w-[14ch] !text-[clamp(2.6rem,7vw,6rem)]">{user.name}</h1>
+            <h1 className="h-hero mt-6 max-w-[14ch] !text-[clamp(2.6rem,7vw,6rem)]">{user.name}</h1>
             <p className="mt-5 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-faint">
               @{user.handle} <span aria-hidden>·</span> joined {when(user.createdAt)} <span aria-hidden>·</span>{" "}
               {rows.length} {rows.length === 1 ? "case" : "cases"}
@@ -127,7 +127,7 @@ async function PassportBody({ params }: Pick<PageProps<"/p/[handle]">, "params">
       </p>
 
       {rows.length === 0 ? (
-        <p className="mt-12 border-y border-rule py-14 text-center display-lg">
+        <p className="mt-12 border-y border-rule py-14 text-center h-lg">
           A passport with no decisions on it is a blank page, not a claim.
         </p>
       ) : (
@@ -156,7 +156,7 @@ async function PassportBody({ params }: Pick<PageProps<"/p/[handle]">, "params">
                     )}
                     {!c.open && <Stamp kind="sealed">sealed</Stamp>}
                   </div>
-                  <h3 className="display-lg mt-2.5 max-w-[28ch]">{c.title}</h3>
+                  <h3 className="h-lg mt-2.5 max-w-[28ch]">{c.title}</h3>
                   <p className="mt-2.5 font-mono text-[0.66rem] text-ink-faint">
                     {c.intentCount} intents <span aria-hidden>·</span> {c.verified ? "chain intact" : "chain broken"}{" "}
                     <span aria-hidden>·</span> drift {c.drift}px{c.cap >= 0 ? ` / cap ${c.cap}px` : ""}
@@ -164,19 +164,19 @@ async function PassportBody({ params }: Pick<PageProps<"/p/[handle]">, "params">
                   </p>
                   <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2">
                     <Link
-                      className="link-underline font-mono text-[0.64rem] uppercase tracking-[0.14em] text-ink-soft hover:text-ink"
+                      className="link font-mono text-[0.64rem] uppercase tracking-[0.14em] text-ink-soft hover:text-ink"
                       href={`/s/${c.ref}`}
                     >
                       Open the record
                     </Link>
                     <a
-                      className="link-underline font-mono text-[0.64rem] uppercase tracking-[0.14em] text-ink-soft hover:text-ink"
+                      className="link font-mono text-[0.64rem] uppercase tracking-[0.14em] text-ink-soft hover:text-ink"
                       href={`/api/v1/cases/${c.ref}/verify`}
                     >
                       Verify via API
                     </a>
                     <a
-                      className="link-underline font-mono text-[0.64rem] uppercase tracking-[0.14em] text-ink-soft hover:text-ink"
+                      className="link font-mono text-[0.64rem] uppercase tracking-[0.14em] text-ink-soft hover:text-ink"
                       href={`/api/v1/cases/${c.ref}/export`}
                       download
                     >
@@ -196,11 +196,11 @@ async function PassportBody({ params }: Pick<PageProps<"/p/[handle]">, "params">
       <div className="mt-16 grid gap-6 border-t border-ink pt-6 md:grid-cols-[14rem_minmax(0,1fr)]">
         <p className="label label-ink">Why a passport, not a testimonial</p>
         <p className="max-w-[62ch] text-sm leading-relaxed text-ink-soft">
-          Anybody can write <span className="em-serif">&ldquo;shipped the thing.&rdquo;</span> This record shows what was
+          Anybody can write <span className="italic">&ldquo;shipped the thing.&rdquo;</span> This record shows what was
           promised, when, at what declared confidence, and whether the promise exceeded what the decisions had earned at
           that point. The slips are part of the story on purpose — a record with no slips tells you nothing. Verify any
           entry with the{" "}
-          <Link className="link-underline text-ink" href="/verify">
+          <Link className="link text-ink" href="/verify">
             in-browser verifier
           </Link>
           .
@@ -214,7 +214,7 @@ function NotFoundPassport({ handle }: { handle: string }) {
   return (
     <div className="py-24 text-center">
       <p className="label">404</p>
-      <h1 className="display-xl mt-4">
+      <h1 className="h-xl mt-4">
         No one is trading as <span className="font-mono text-[0.72em]">@{handle}</span>
       </h1>
       <p className="mt-3 text-sm text-ink-soft">Passports appear when a person records their first case.</p>

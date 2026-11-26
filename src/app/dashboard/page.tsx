@@ -18,7 +18,7 @@ async function Cases() {
   if (cases.length === 0) {
     return (
       <div className="border-y border-rule py-16 text-center">
-        <p className="display-lg">Nothing has been decided yet.</p>
+        <p className="h-lg">Nothing has been decided yet.</p>
         <p className="mx-auto mt-3 max-w-[34ch] text-sm text-ink-soft">
           An empty ledger is a blank page, not a claim. Open a case and put something real on the record.
         </p>
@@ -46,7 +46,7 @@ async function Cases() {
                 {c.slipped && <Stamp kind="slipped">slipped</Stamp>}
                 {!c.open && <Stamp kind="sealed">sealed</Stamp>}
               </div>
-              <p className="display-lg mt-2 max-w-[30ch] group-hover:underline group-hover:decoration-rule-strong group-hover:underline-offset-[6px]">
+              <p className="h-lg mt-2 max-w-[30ch] group-hover:underline group-hover:decoration-rule-strong group-hover:underline-offset-[6px]">
                 {c.title}
               </p>
               <p className="mt-2 font-mono text-[0.66rem] text-ink-faint">
@@ -69,7 +69,7 @@ export default function DashboardPage() {
       <div className="flex flex-wrap items-end justify-between gap-6 border-b border-ink pb-4">
         <div>
           <p className="label">02 / Your ledger</p>
-          <h1 className="display-xl mt-3">Cases</h1>
+          <h1 className="h-xl mt-3">Cases</h1>
         </div>
         <div className="flex gap-3">
           <Link className="btn btn-ghost btn-sm" href="/verify">

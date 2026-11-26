@@ -134,7 +134,7 @@ export function LedgerTable({ intents }: { intents: Intent[] }) {
             <div className="numeral pt-1 text-right text-lg text-ink-faint">{String(intent.n).padStart(2, "0")}</div>
             <div className="min-w-0">
               <p
-                className={`display-md !text-[1.2rem] leading-snug sm:!text-[1.35rem] ${
+                className={`h-md !text-[1.2rem] leading-snug sm:!text-[1.35rem] ${
                   intent.status === "flagged"
                     ? "text-alarm line-through decoration-alarm/30 decoration-1"
                     : intent.status === "superseded" || intent.status === "withdrawn"

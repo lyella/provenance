@@ -37,7 +37,7 @@ async function ShareBody({ params }: Pick<PageProps<"/s/[ref]">, "params">) {
           <p className="label">
             {view.kind} · {policyLabel} · {view.intentCount} decisions
           </p>
-          <h1 className="display-xl mt-4 max-w-[22ch]">{view.title}</h1>
+          <h1 className="h-xl mt-4 max-w-[22ch]">{view.title}</h1>
         </header>
 
         <section className="mt-10 border-t border-ink pt-5">
@@ -71,7 +71,7 @@ async function ShareBody({ params }: Pick<PageProps<"/s/[ref]">, "params">) {
                 <span className="numeral pt-1 text-right text-lg text-ink-faint">{String(intent.n).padStart(2, "0")}</span>
                 <div>
                   <p
-                    className={`display-md !text-[1.1rem] leading-snug sm:!text-[1.25rem] ${
+                    className={`h-md !text-[1.1rem] leading-snug sm:!text-[1.25rem] ${
                       intent.status === "flagged"
                         ? "text-alarm line-through decoration-alarm/30 decoration-1"
                         : intent.status === "superseded"
@@ -114,20 +114,20 @@ async function ShareBody({ params }: Pick<PageProps<"/s/[ref]">, "params">) {
           <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
             <CopyButton text={view.head} label="Copy head" />
             <a
-              className="link-underline font-mono text-[0.64rem] uppercase tracking-[0.14em] text-ink-soft hover:text-ink"
+              className="link font-mono text-[0.64rem] uppercase tracking-[0.14em] text-ink-soft hover:text-ink"
               href={`/api/v1/cases/${view.ref}/export`}
               download
             >
               Download proof
             </a>
             <a
-              className="link-underline font-mono text-[0.64rem] uppercase tracking-[0.14em] text-ink-soft hover:text-ink"
+              className="link font-mono text-[0.64rem] uppercase tracking-[0.14em] text-ink-soft hover:text-ink"
               href={`/verify?ref=${view.ref}`}
             >
               Verify in browser
             </a>
             <a
-              className="link-underline font-mono text-[0.64rem] uppercase tracking-[0.14em] text-ink-soft hover:text-ink"
+              className="link font-mono text-[0.64rem] uppercase tracking-[0.14em] text-ink-soft hover:text-ink"
               href={`/api/v1/cases/${view.ref}/anchor`}
             >
               Anchor

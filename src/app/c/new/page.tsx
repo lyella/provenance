@@ -16,7 +16,7 @@ export default function NewCasePage() {
     <main className="shell py-12 sm:py-16">
       <div className="border-b border-ink pb-4">
         <p className="label">01 / Open a case</p>
-        <h1 className="display-xl mt-3 max-w-[20ch]">What is on the line?</h1>
+        <h1 className="h-xl mt-3 max-w-[20ch]">What is on the line?</h1>
       </div>
       <div className="mt-10">
         <Suspense fallback={<p className="label">Checking your session…</p>}>

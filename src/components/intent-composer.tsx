@@ -112,7 +112,7 @@ export function IntentComposer({
             value={text}
             onChange={(e) => setBody(e.target.value)}
             placeholder="What are you committing to, right now?"
-            className="display-md w-full resize-none border-0 border-b border-rule-strong bg-transparent pb-2 !text-[1.15rem] text-ink outline-none placeholder:text-ink-faint focus:border-ink"
+            className="h-md w-full resize-none border-0 border-b border-rule-strong bg-transparent pb-2 !text-[1.15rem] text-ink outline-none placeholder:text-ink-faint focus:border-ink"
           />
         </label>
 

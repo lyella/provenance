@@ -70,7 +70,7 @@ async function main() {
   console.log("pages");
   // The hero is split into per-word spans for the type reveal, so assert on the
   // words and the section headings rather than on one contiguous sentence.
-  await page("/", ["quietly", "rewritten", "Autopilot agent", "Twelve decisions", "Open your ledger"]);
+  await page("/", ["quietly", "rewritten", "Autopilot agent", "twelve live decisions", "open a ledger"]);
   await page("/verify", ["Verify locally"]);
   await page("/code", ["provenance-verify", "pv.intent/1"]);
   await page("/signin", ["reclaim it"]);

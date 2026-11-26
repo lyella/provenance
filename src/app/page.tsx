@@ -5,27 +5,15 @@ import { AutopilotDemo } from "@/components/autopilot-demo";
 import { CountUp, Reveal, SplitText } from "@/components/motion";
 import { currentUser } from "@/server/http";
 
-/* ------------------------------- furniture ------------------------------- */
-
-function SectionHead({ index, title, note }: { index: string; title: string; note?: string }) {
-  return (
-    <Reveal className="grid items-baseline gap-4 border-t border-ink pt-4 md:grid-cols-[6rem_1fr_auto]">
-      <span className="label label-ink">{index}</span>
-      <h2 className="display-xl">{title}</h2>
-      {note ? <span className="label max-w-[18rem] md:text-right">{note}</span> : <span />}
-    </Reveal>
-  );
-}
-
 /* --------------------------------- start --------------------------------- */
 
 async function StartPanel() {
   const user = await currentUser();
   if (user) {
     return (
-      <div className="border border-ink p-6">
-        <p className="label label-ink">Signed in as @{user.handle}</p>
-        <p className="display-md mt-3 max-w-[22ch]">Your ledger is open. Decide something worth checking.</p>
+      <div>
+        <p className="label mb-3">Signed in as @{user.handle}</p>
+        <p className="h-md max-w-[24ch]">Your ledger is open. Decide something worth checking.</p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Link className="btn" href="/dashboard">
             My ledger
@@ -40,140 +28,132 @@ async function StartPanel() {
   return <AuthForm />;
 }
 
-/* --------------------------------- page ---------------------------------- */
+const CAPABILITIES = [
+  {
+    title: "The chain",
+    body: "Every intent names its predecessor. Edit one word of history and every later hash changes.",
+    tech: "SHA-256 · canonical JSON · append-only",
+  },
+  {
+    title: "The ledger",
+    body: "Confidence sets a price. A guess costs more than a conviction, so honesty is measured rather than claimed.",
+    tech: "low 4 · medium 2 · high 1",
+  },
+  {
+    title: "The slip",
+    body: "Cross the allowance and the record issues a slip: the exact decision, the date, the cap. Your weakest link, in writing.",
+    tech: "policy zero · headroom · unpoliced",
+  },
+  {
+    title: "The passport",
+    body: "A public record of commitment quality — including the reversals — that anyone can verify without an account.",
+    tech: "verify offline · no server required",
+  },
+];
 
 export default function Home() {
   return (
     <main>
-      {/* ------------------------------ hero ------------------------------ */}
-      <section className="shell pt-10 pb-16 sm:pt-16">
-        <div className="flex items-start justify-between gap-6 border-b border-rule pb-4">
-          <p className="label">An open format for decisions</p>
-          <p className="label hidden sm:block">Est. 2026 · pv.intent/1</p>
-        </div>
-
-        <h1 className="display-hero mt-10 max-w-[16ch] sm:mt-14">
-          <SplitText text="Decisions that" stagger={70} />
+      {/* ------------------------------- hero ------------------------------ */}
+      <section className="shell pt-10 pb-16 sm:pt-16 sm:pb-24">
+        <h1 className="h-hero max-w-[16ch]">
+          <SplitText text="Decisions that" stagger={55} />
           <br />
-          <SplitText text="cannot be" stagger={70} base={140} />
+          <SplitText text="cannot be" stagger={55} base={110} />
           <br />
-          <span className="display-hero-accent inline-block text-signal">
-            <SplitText text="quietly rewritten." stagger={70} base={280} />
-          </span>
+          <SplitText text="quietly rewritten." stagger={55} base={220} />
         </h1>
 
-        <div className="mt-12 grid gap-8 border-t border-rule pt-6 md:grid-cols-[1.15fr_1fr] md:gap-16">
-          <Reveal delay={120}>
-            <p className="prose-lede">
-              Every assumption, every commit, every <span className="em-serif">I&rsquo;m sure about this</span>{" "}
-              — written into a hash-linked chain, priced by how confident you actually were, and published with a
-              head hash anyone can check without trusting this site.
-            </p>
-          </Reveal>
-          <Reveal delay={200} className="flex flex-col items-start gap-5 md:items-end">
-            <div className="flex flex-wrap gap-3">
-              <a className="btn" href="#proof">
-                See it happen in 12 seconds
-              </a>
-              <Link className="btn btn-ghost" href="/code">
-                <span className="font-mono">&gt; verify</span>
-              </Link>
-            </div>
-            <p className="label md:text-right">Scroll to watch a slip get issued ↓</p>
-          </Reveal>
+        <p className="lede mt-10 max-w-[42ch] sm:mt-14">
+          Every assumption, every commit, every “I&apos;m sure about this” — written into a hash-linked chain, priced by
+          how confident you actually were.
+        </p>
+
+        <div className="mt-10 flex flex-wrap gap-3 sm:mt-12">
+          <a className="btn" href="#proof">
+            See it happen in 12 seconds
+          </a>
+          <Link className="btn btn-ghost" href="/verify">
+            Verify a proof
+          </Link>
         </div>
       </section>
 
-      {/* --------------------------- figures band ------------------------- */}
-      <section className="border-y border-ink bg-paper-deep/40">
-        <div className="shell grid grid-cols-2 gap-px py-8 sm:grid-cols-4 sm:py-10">
+      {/* ---------------------------- figures ----------------------------- */}
+      <section className="shell pb-16 sm:pb-24">
+        <dl className="grid grid-cols-2 gap-y-10 border-t border-ink pt-8 md:grid-cols-4">
           {[
-            { n: <CountUp to={4} suffix="×" />, l: "cheaper to be honest", d: "low confidence costs four times high" },
-            { n: <CountUp to={1.5} decimals={1} suffix="×" />, l: "the cost of being wrong", d: "a flagged decision is charged again" },
-            { n: <CountUp to={256} />, l: "bits per link", d: "SHA-256 over canonical JSON" },
-            { n: <CountUp to={0} />, l: "third parties trusted", d: "verification runs on your machine" },
+            { n: 4, suffix: "×", l: "cheaper to be honest" },
+            { n: 1.5, suffix: "×", l: "the cost of being wrong" },
+            { n: 256, suffix: "", l: "bits per link" },
+            { n: 0, suffix: "", l: "third parties trusted" },
           ].map((f, i) => (
-            <Reveal key={f.l} delay={i * 90} className="flex flex-col gap-1 pr-4">
-              <span className="numeral text-5xl sm:text-6xl">{f.n}</span>
-              <span className="mt-3 text-sm font-medium tracking-tight">{f.l}</span>
-              <span className="label mt-0.5 !normal-case !tracking-normal">{f.d}</span>
-            </Reveal>
+            <div key={f.l}>
+              <dd className="numeral text-[clamp(2.5rem,5vw,4rem)]">
+                <CountUp to={f.n} suffix={f.suffix} decimals={f.n % 1 ? 1 : 0} />
+              </dd>
+              <dt className="label mt-2 max-w-[16ch]">{f.l}</dt>
+              {i < 0 && null}
+            </div>
           ))}
+        </dl>
+      </section>
+
+      {/* ------------------------- the signal band ------------------------ */}
+      <section className="band">
+        <div className="shell py-16 sm:py-24">
+          <p className="eyebrow mb-10">Expertise — what is on the record</p>
+          <ul>
+            {CAPABILITIES.map((c) => (
+              <li key={c.title} className="band-rule grid gap-3 py-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] md:gap-12">
+                <h2 className="h-lg">{c.title}</h2>
+                <div>
+                  <p className="text-[1.0625rem] leading-relaxed text-white/95">{c.body}</p>
+                  <p className="mono mt-3 text-sm text-white/70">{c.tech}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
       {/* ------------------------------ proof ----------------------------- */}
-      <section id="proof" className="shell scroll-mt-20 py-16 sm:py-24">
-        <SectionHead index="01 / Proof" title="Twelve decisions. One live chain." note="Not a mock — each step is signed on the server." />
-        <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,19rem]">
-          <Reveal>
-            <AutopilotDemo />
-          </Reveal>
-          <Reveal delay={120} className="flex flex-col justify-between gap-8">
-            <div className="space-y-4 text-sm leading-relaxed text-ink-soft">
-              <p>
-                This agent is not an LLM and says so. It follows a fixed playbook, so if it slips you can re-run it and
-                watch the same slip happen again.
-              </p>
-              <p>
-                Anything can be an agent here. The format constrains what a decision must{" "}
-                <span className="em-serif text-ink">declare</span> — its confidence and its evidence — not which model
-                took it.
-              </p>
-            </div>
-            <div className="border-t border-rule pt-4">
-              <p className="label mb-2">What to watch</p>
-              <ol className="space-y-2 font-mono text-[0.72rem] leading-relaxed text-ink-soft">
-                <li>01 — intents chain by hash</li>
-                <li>02 — a flag re-prices an earlier call</li>
-                <li>03 — drift crosses the cap</li>
-                <li>04 — the slip is stamped, permanently</li>
-              </ol>
-            </div>
-          </Reveal>
+      <section id="proof" className="shell scroll-mt-24 py-16 sm:py-24">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,20rem)] lg:gap-16">
+          <div>
+            <p className="eyebrow mb-6">The proof — twelve live decisions</p>
+            <Reveal>
+              <AutopilotDemo />
+            </Reveal>
+          </div>
+          <div className="border-t border-ink pt-6 lg:border-t-0 lg:pt-0">
+            <p className="body-copy">
+              This agent is not an LLM and says so. It follows a fixed playbook, so if it slips you can re-run it and
+              watch the same slip happen again.
+            </p>
+            <p className="body-copy mt-4">
+              Anything can be an agent here. The format constrains what a decision must declare — its confidence and its
+              evidence — not which model took it.
+            </p>
+            <p className="label mt-8 mb-3">What to watch</p>
+            <ol className="space-y-2">
+              {["intents chain by hash", "a flag re-prices an earlier call", "drift crosses the allowance", "the slip is issued, permanently"].map((s, i) => (
+                <li key={s} className="flex gap-3 text-[0.9375rem] text-ink-soft">
+                  <span className="mono text-ink-faint">{String(i + 1).padStart(2, "0")}</span>
+                  {s}
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
       </section>
 
       {/* ---------------------------- mechanism --------------------------- */}
-      <section id="mechanism" className="shell scroll-mt-20 py-16 sm:py-24">
-        <SectionHead index="02 / Mechanism" title="Three rules, nothing else." note="The whole system can be read in a minute." />
-        <div className="mt-10 grid gap-px border-y border-rule bg-rule md:grid-cols-3">
-          {[
-            {
-              n: "01",
-              k: "The chain",
-              t: "An intent names its predecessor.",
-              b: "hash = sha256(prev, n, body, confidence, evidence, tags, by, time). Change any word and every later hash changes. The head hash is the whole record, compressed.",
-            },
-            {
-              n: "02",
-              k: "The ledger",
-              t: "Confidence sets the price.",
-              b: "low 4 · medium 2 · high 1 exposure points. Amending refunds the original. Flagging a wrong decision costs 1.5× and then some. Drift is the running sum.",
-            },
-            {
-              n: "03",
-              k: "The slip",
-              t: "Exposure has a ceiling.",
-              b: "Unpoliced, zero, or a fixed allowance. Cross it and a slip is issued — the exact decision, the date, the cap. Your weakest link, in writing.",
-            },
-          ].map((c, i) => (
-            <Reveal key={c.n} delay={i * 110} className="bg-paper p-6 sm:p-8">
-              <div className="flex items-baseline justify-between">
-                <span className="label label-ink">{c.k}</span>
-                <span className="numeral text-2xl text-ink-faint">{c.n}</span>
-              </div>
-              <h3 className="display-md mt-6 max-w-[18ch]">{c.t}</h3>
-              <p className="mt-4 text-sm leading-relaxed text-ink-soft">{c.b}</p>
-            </Reveal>
-          ))}
-        </div>
-
-        <div className="mt-12 grid gap-10 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
-          <Reveal className="min-w-0">
-            <p className="label mb-3">In the terminal</p>
-            <pre className="overflow-x-auto border border-ink bg-night p-5 text-[0.72rem] leading-relaxed text-paper sm:p-6">
-              <code>{`$ provenance verify proof.json
+      <section id="mechanism" className="shell scroll-mt-24 pb-16 sm:pb-24">
+        <p className="eyebrow mb-6">Mechanism — in the terminal</p>
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:gap-16">
+          <pre className="overflow-x-auto border border-ink p-5 text-[0.8rem] leading-relaxed sm:p-6">
+            <code className="mono">{`$ provenance verify proof.json
   link 1/4  #1 prev 000000… hash 9f2c1a…   ok
   link 2/4  #2 prev 9f2c1a… hash 4d81be…   ok
   link 3/4  #3 prev 4d81be… hash 77ac02…   ok
@@ -184,19 +164,16 @@ export default function Home() {
 $ provenance verify proof.json
   BREAK at link 2 · content does not match its recorded hash
   expected 4d81be…  found 0aa9d2…`}</code>
-            </pre>
-          </Reveal>
-          <Reveal delay={120} className="flex min-w-0 flex-col justify-between gap-6">
-            <div className="space-y-4 text-sm leading-relaxed text-ink-soft">
-              <p>
-                The server is not the authority. Verification reads the exported links, recomputes every hash and
-                compares the head — no network call, no account.
-              </p>
-              <p>
-                Anchors live at a stable URL so a record can be checked years later, even if this deployment is gone.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-3">
+          </pre>
+          <div>
+            <p className="body-copy">
+              The server is not the authority. Verification reads the exported links, recomputes every hash and compares
+              the head — no network call, no account.
+            </p>
+            <p className="body-copy mt-4">
+              Anchors live at a stable URL so a record can be checked years later, even if this deployment is gone.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
               <Link className="btn btn-ghost btn-sm" href="/verify">
                 Verify in the browser
               </Link>
@@ -204,50 +181,40 @@ $ provenance verify proof.json
                 Read the format
               </Link>
             </div>
-          </Reveal>
+          </div>
         </div>
       </section>
 
       {/* ------------------------------ start ----------------------------- */}
-      <section id="start" className="shell scroll-mt-20 py-16 sm:py-24">
-        <SectionHead index="03 / Begin" title="Open your ledger." note="Private by default. Published only when you seal." />
-        <div className="mt-10 grid items-start gap-12 md:grid-cols-[1.1fr_1fr]">
-          <Reveal className="space-y-8">
-            <p className="prose-lede">
-              Start with three cases of your own. Take a real decision, declare how sure you are, and amend it the
-              first time you learn you were wrong — before anyone has to flag it.
-            </p>
-            <ol className="divide-y divide-rule border-y border-rule">
-              {[
-                ["Open a case", "Name the decision you are actually facing, and how strictly exposure is policed."],
-                ["Declare as you go", "Each intent records confidence and evidence at the moment you decided."],
-                ["Seal it", "Freeze the record, publish the head, and carry the chain with you."],
-              ].map(([h, b], i) => (
-                <li key={h} className="flex gap-5 py-4">
-                  <span className="numeral w-8 shrink-0 text-sm text-ink-faint">0{i + 1}</span>
-                  <span className="text-sm leading-relaxed text-ink-soft">
-                    <strong className="font-medium text-ink">{h}.</strong> {b}
-                  </span>
-                </li>
-              ))}
-            </ol>
-            <div className="flex flex-wrap gap-x-6 gap-y-2">
-              <Link className="link-underline font-mono text-[0.68rem] uppercase tracking-[0.14em]" href="/feed.xml">
-                RSS of sealed cases
-              </Link>
-              <Link className="link-underline font-mono text-[0.68rem] uppercase tracking-[0.14em]" href="/api/openapi">
-                OpenAPI
-              </Link>
-              <Link className="link-underline font-mono text-[0.68rem] uppercase tracking-[0.14em]" href="/p/shaira">
-                A public passport
-              </Link>
+      <section id="start" className="bg-paper-grey">
+        <div className="shell scroll-mt-24 py-16 sm:py-24">
+          <p className="eyebrow mb-6">Begin — open a ledger</p>
+          <div className="grid gap-12 md:grid-cols-[1.1fr_minmax(0,26rem)] md:gap-16">
+            <div>
+              <h2 className="h-xl max-w-[16ch]">Start with three cases of your own.</h2>
+              <p className="lede mt-6 max-w-[36ch]">
+                Take a real decision, declare how sure you are, and amend it the first time you learn you were wrong —
+                before anyone has to flag it.
+              </p>
+              <ol className="mt-10 border-t border-rule">
+                {[
+                  ["Open a case", "Name the decision you are actually facing, and how strictly exposure is policed."],
+                  ["Declare as you go", "Each intent records confidence and evidence at the moment you decided."],
+                  ["Seal it", "Freeze the record, publish the head, and carry the chain with you."],
+                ].map(([h, b], i) => (
+                  <li key={h} className="flex gap-5 border-b border-rule py-4">
+                    <span className="mono w-7 shrink-0 text-sm text-ink-faint">0{i + 1}</span>
+                    <span className="body-copy">
+                      <strong className="font-bold text-ink">{h}.</strong> {b}
+                    </span>
+                  </li>
+                ))}
+              </ol>
             </div>
-          </Reveal>
-          <Reveal delay={140}>
-            <Suspense fallback={<div className="h-96 animate-pulse border border-rule bg-paper-deep/40" />}>
+            <Suspense fallback={<div className="h-96 animate-pulse border border-rule" />}>
               <StartPanel />
             </Suspense>
-          </Reveal>
+          </div>
         </div>
       </section>
     </main>

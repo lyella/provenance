@@ -72,7 +72,7 @@ export function CaseShell({
       {/* ------------------------------- main ------------------------------ */}
       <div className="min-w-0">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-rule pb-3">
-          <Link href="/dashboard" className="link-underline font-mono text-[0.66rem] uppercase tracking-[0.16em] text-ink-faint">
+          <Link href="/dashboard" className="link font-mono text-[0.66rem] uppercase tracking-[0.16em] text-ink-faint">
             ← All cases
           </Link>
           <span className="font-mono text-[0.66rem] tracking-[0.16em] text-ink-faint">{view.ref}</span>
@@ -93,7 +93,7 @@ export function CaseShell({
               {!view.open && <Stamp kind="sealed">sealed {when(view.sealedAt)}</Stamp>}
             </span>
           </div>
-          <h1 className="display-xl mt-4 max-w-[24ch]">{view.title}</h1>
+          <h1 className="h-xl mt-4 max-w-[24ch]">{view.title}</h1>
         </header>
 
         {/* Exposure: big number, then the strip. */}
@@ -142,7 +142,7 @@ export function CaseShell({
                   {String(view.intentCount + 1).padStart(2, "0")}
                 </span>
                 <div>
-                  <p className="display-md !text-[1.2rem] leading-snug sm:!text-[1.35rem]">{pendingIntent.body}</p>
+                  <p className="h-md !text-[1.2rem] leading-snug sm:!text-[1.35rem]">{pendingIntent.body}</p>
                   <p className="mt-2 font-mono text-[0.66rem] text-ink-faint">
                     {pendingIntent.amendingN ? `amending #${pendingIntent.amendingN} · ` : ""}signing…
                   </p>
@@ -159,7 +159,7 @@ export function CaseShell({
                 <span className="numeral pt-1 text-right text-lg text-ink-faint">{String(intent.n).padStart(2, "0")}</span>
                 <div className="min-w-0">
                   <p
-                    className={`display-md !text-[1.2rem] leading-snug sm:!text-[1.35rem] ${
+                    className={`h-md !text-[1.2rem] leading-snug sm:!text-[1.35rem] ${
                       intent.status === "flagged"
                         ? "text-alarm line-through decoration-alarm/30 decoration-1"
                         : intent.status === "superseded" || intent.status === "withdrawn"
@@ -204,7 +204,7 @@ export function CaseShell({
                     <div className="mt-3 flex flex-wrap items-center gap-4">
                       {intent.status !== "flagged" && (
                         <button
-                          className="link-underline font-mono text-[0.66rem] uppercase tracking-[0.14em] text-ink-soft hover:text-ink"
+                          className="link font-mono text-[0.66rem] uppercase tracking-[0.14em] text-ink-soft hover:text-ink"
                           onClick={() => setAmending({ n: intent.n, body: intent.body })}
                         >
                           Amend
@@ -226,7 +226,7 @@ export function CaseShell({
 
           {canEdit && view.open && ordered.length > 0 && (
             <p className="mt-10 max-w-[46ch] border-t border-rule pt-4 text-sm leading-relaxed text-ink-soft">
-              <span className="em-serif text-ink">Two decisions is still an empty page.</span> A record earns attention
+              <span className="italic text-ink">Two decisions is still an empty page.</span> A record earns attention
               by length and by honesty — keep going until the case has enough on it to be worth reading.
             </p>
           )}
@@ -256,16 +256,16 @@ export function CaseShell({
           <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
             <CopyButton text={view.head} label="Copy head" />
             <a
-              className="link-underline font-mono text-[0.66rem] uppercase tracking-[0.14em] text-ink-soft hover:text-ink"
+              className="link font-mono text-[0.66rem] uppercase tracking-[0.14em] text-ink-soft hover:text-ink"
               href={`/api/v1/cases/${view.ref}/export`}
               download
             >
               Download proof
             </a>
-            <Link className="link-underline font-mono text-[0.66rem] uppercase tracking-[0.14em] text-ink-soft hover:text-ink" href={`/verify?ref=${view.ref}`}>
+            <Link className="link font-mono text-[0.66rem] uppercase tracking-[0.14em] text-ink-soft hover:text-ink" href={`/verify?ref=${view.ref}`}>
               Verify offline
             </Link>
-            <Link className="link-underline font-mono text-[0.66rem] uppercase tracking-[0.14em] text-ink-soft hover:text-ink" href={`/s/${view.ref}`}>
+            <Link className="link font-mono text-[0.66rem] uppercase tracking-[0.14em] text-ink-soft hover:text-ink" href={`/s/${view.ref}`}>
               Share view
             </Link>
           </div>
@@ -301,8 +301,8 @@ function PolicyCard({ slip, kind }: { slip: SlipResult; kind: string }) {
         {slip.windowDays === 0 ? "all time" : `${slip.windowDays} days`}
       </p>
       <p className="mt-2 text-ink-faint">
-        A decision declared <em className="em-serif">low</em> costs 4 points, <em className="em-serif">medium</em> 2,{" "}
-        <em className="em-serif">high</em> 1. Amending refunds the original; flagging charges 1.5×.
+        A decision declared <em className="italic">low</em> costs 4 points, <em className="italic">medium</em> 2,{" "}
+        <em className="italic">high</em> 1. Amending refunds the original; flagging charges 1.5×.
       </p>
     </section>
   );

@@ -138,7 +138,7 @@ export function VerifyPanel({ initialRef }: { initialRef?: string }) {
           rows={16}
           spellCheck={false}
           placeholder="Paste a proof.json from “Download proof”, or paste any export you were given."
-          className="mt-3 w-full resize-y border border-ink bg-night p-4 font-mono text-[0.72rem] leading-relaxed text-paper outline-none placeholder:text-paper/40"
+          className="mt-3 w-full resize-y border border-ink bg-ink p-4 font-mono text-[0.72rem] leading-relaxed text-paper outline-none placeholder:text-paper/40"
         />
         {source && <p className="mt-2 text-[0.7rem] text-ink-faint">{source}</p>}
 
@@ -161,7 +161,7 @@ export function VerifyPanel({ initialRef }: { initialRef?: string }) {
             <span className="stamp stamp-broken stamp-in">
               {outcome.result?.brokenAt ? `Broken at #${outcome.result.brokenAt}` : "Invalid"}
             </span>
-            <p className="display-md mt-3 text-alarm">{outcome.message}</p>
+            <p className="h-md mt-3 text-alarm">{outcome.message}</p>
             {outcome.result && !outcome.result.valid && outcome.result.checked > 0 && (
               <p className="mt-2 text-xs text-ink-soft">
                 {outcome.result.checked} link(s) before the break are intact — the damage is at or after link #
