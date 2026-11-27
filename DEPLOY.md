@@ -103,7 +103,7 @@ Gives reviewers something to look at immediately.
 BASE=https://your-url.vercel.app node bin/seed-sample.mjs --base https://your-url.vercel.app
 ```
 
-Creates `alex@provenance.demo` / `read-only-sample` with three cases: an incident that slipped, a forecast that held, and an open migration.
+Creates the `alex@provenance.demo` sample account (password supplied via `PROVENANCE_SAMPLE_PASSWORD`, never hardcoded) with three cases: an incident that slipped, a forecast that held, and an open migration.
 
 On Vercel the in-memory store means this vanishes on the next cold start — run it on route C if you want it to last.
 

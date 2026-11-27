@@ -15,11 +15,17 @@ const base = process.argv.includes("--base")
   ? process.argv[process.argv.indexOf("--base") + 1]
   : "http://127.0.0.1:3000";
 
+const SAMPLE_PASSWORD = process.env.PROVENANCE_SAMPLE_PASSWORD;
+if (!SAMPLE_PASSWORD) {
+  console.error("error: set PROVENANCE_SAMPLE_PASSWORD to seed the sample account (no default password is shipped)");
+  process.exit(2);
+}
+
 const ACCOUNT = {
   name: "Alex Rivera",
   handle: "alex",
   email: "alex@provenance.demo",
-  password: "read-only-sample",
+  password: SAMPLE_PASSWORD,
 };
 
 let cookie = "";
@@ -226,7 +232,7 @@ async function main() {
   const passport = await api("GET", `/api/v1/passport/${ACCOUNT.handle}`);
   console.log("\nsample account ready");
   console.log(`  email    : ${ACCOUNT.email}`);
-  console.log(`  password : ${ACCOUNT.password}`);
+  console.log(`  password : (set via PROVENANCE_SAMPLE_PASSWORD)`);
   console.log(`  passport : ${base}/p/${ACCOUNT.handle}`);
   console.log(`  stats    : ${JSON.stringify(passport.stats)}`);
   for (const c of passport.cases) console.log(`    ${c.ref} ${c.open ? "open  " : "sealed"} verified=${c.verified} slipped=${c.slipped}`);

@@ -24,7 +24,11 @@ const BASE = flag("base", process.env.BASE ?? "http://127.0.0.1:3000").replace(/
 const NAME = flag("name", "Your Name");
 const HANDLE = flag("handle", "you");
 const EMAIL = flag("email", `${HANDLE}@provenance.demo`);
-const PASSWORD = flag("password", "provenance-demo-password");
+const PASSWORD = flag("password", process.env.PROVENANCE_SEED_PASSWORD ?? "");
+if (!PASSWORD) {
+  console.error("error: pass --password <pw> or set PROVENANCE_SEED_PASSWORD (no default password is shipped)");
+  process.exit(2);
+}
 
 let cookie = "";
 
